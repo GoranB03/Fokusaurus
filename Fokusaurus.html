@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+
+<html lang="hr">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Fokusaurus – Učimo zajedno!</title>
+<link href="style.css" rel="stylesheet"/>
+</head>
+<link rel="icon" type="image/png" href="slike/dino-main2.png">
+<body>
+<!-- ████████████████████ HOME ████████████████████ -->
+<div class="screen active" id="screen-home">
+<!-- LIJEVA STRANA -->
+<div class="home-left">
+<div class="mascot" id="home-mascot"><img src="slike/dino-main.png" style="width:250px;height:250px;"/></div>
+<h1 class="home-title">Fokusaurus</h1>
+<p class="home-subtitle">Skupi što više Dino-jaja! 🦕</p>
+<div class="stars-display">🥚 <span id="total-stars">0</span> Dino-jaja</div>
+<div class="level-selector">
+<button class="level-btn easy selected" onclick="playSound('click'); setLevel('easy')">🌴 Lakše</button>
+<button class="level-btn hard" onclick="playSound('click'); setLevel('hard')">🌋 Teže</button>
+</div>
+<button class="btn-primary" onclick="playSound('click'); goToEnd(true)">🏆 Moji rezultati</button>
+<button class="theme-toggle" id="options-btn" onclick="playSound('click'); toggleOptions()">⚙️ Opcije</button>
+<div class="options-section" id="options-section" style="display:none;">
+<button class="theme-toggle" id="theme-toggle" onclick="playSound('click'); toggleTheme()">🌙 Tamna tema</button>
+<button class="theme-toggle" id="sound-toggle" onclick="toggleSound()">🔊 Zvučni efekti: Uključeni</button>
+<button class="theme-toggle" id="voice-toggle" onclick="playSound('click'); toggleVoice()">🗣️ Glas: Uključen</button>
+</div>
+</div>
+<!-- DESNA STRANA -->
+<div class="home-right">
+<div class="games-grid">
+<div class="game-card c1" onclick="playSound('click'); startGame('g1')">
+<img alt="Dino slovo" class="emoji-img" src="slike/dino-holding-letter-a.png"/>
+<div><h3>Pronađi slovo u fontovima</h3></div>
+</div>
+<div class="game-card c2" onclick="playSound('click'); startGame('g2')">
+<img alt="Dino balansira slova" class="emoji-img" src="slike/dino-balancing-letters.png"/>
+<div><h3>Poredaj slova A→E</h3></div>
+</div>
+<div class="game-card c3" onclick="playSound('click'); startGame('g3')">
+<img alt="Dino detektiv" class="emoji-img" src="slike/dino-detective.png"/>
+<div><h3>Što je nestalo?</h3></div>
+</div>
+<div class="game-card c4" onclick="playSound('click'); startGame('g4')">
+<img alt="Dino munja" class="emoji-img" src="slike/dino-thunder.png"/>
+<div><h3>Klikni kad se pojavi!</h3></div>
+</div>
+<div class="game-card c5" onclick="playSound('click'); startGame('g5')">
+<img alt="Dino slaže riječi" class="emoji-img" src="slike/dino-words.png"/>
+<div><h3>Složi riječ od slova</h3></div>
+</div>
+</div>
+</div>
+</div>
+<!-- ████████████████████ GAME 1: Font Recognition ████████████████████ -->
+<div class="screen" id="screen-g1">
+<div class="game-header">
+<button class="back-btn" onclick="playSound('click'); goHome()">←</button>
+<img src="slike/dino-holding-letter-a.png" style="width:100px;">
+<div class="score-badge">🥚 <span id="g1-score">0</span></div>
+</div>
+<div class="star-meter" id="g1-stars"></div>
+<div class="instruction">
+
+<span id="g1-instr">Pronađi ovo slovo!</span>
+</div>
+<div class="font-target" id="g1-target">A</div>
+<div class="font-options" id="g1-options"></div>
+<div id="g1-progress" style="font-weight:700;color:#aaa;font-size:0.95rem;"></div>
+</div>
+<!-- ████████████████████ GAME 2: Sort Letters ████████████████████ -->
+<div class="screen" id="screen-g2">
+<div class="game-header">
+<button class="back-btn" onclick="playSound('click'); goHome()">←</button>
+<img src="slike/dino-balancing-letters.png" style="width:100px;">
+<div class="score-badge">🥚 <span id="g2-score">0</span></div>
+</div>
+<div class="star-meter" id="g2-stars"></div>
+<div class="instruction">
+
+<span id="g2-instr">Poredaj slova po abecedi!</span>
+</div>
+<div class="sort-container">
+<div style="font-weight:700;font-size:0.95rem;color:#aaa;">Slova za slaganje:</div>
+<div class="sort-pool" id="g2-pool"></div>
+<div style="font-weight:700;font-size:0.95rem;color:var(--secondary);">Tvoj redoslijed:</div>
+<div class="sort-slots" id="g2-slots"></div>
+<button class="sort-check-btn" onclick="checkSort()">✅ Provjeri!</button>
+</div>
+</div>
+<!-- ████████████████████ GAME 3: Što je nestalo ████████████████████ -->
+<div class="screen" id="screen-g3">
+<div class="game-header">
+<button class="back-btn" onclick="playSound('click'); goHome()">←</button>
+<img src="slike/dino-detective.png" style="width:100px;">
+<div class="score-badge">🥚 <span id="g3-score">0</span></div>
+</div>
+<div class="star-meter" id="g3-stars"></div>
+<div class="instruction">
+
+<span id="g3-instr">Zapamti slike pa pogodi što je nestalo!</span>
+</div>
+<div class="phase-label" id="g3-phase">Zapamti! 👀</div>
+<button class="sort-check-btn" id="g3-ready-btn" onclick="startG3Round()" style="display:none;">✅ Spreman!</button>
+<div class="items-grid" id="g3-grid"></div>
+<div class="choices-row" id="g3-choices" style="display:none;"></div>
+<div id="g3-progress" style="font-weight:700;color:#aaa;font-size:0.95rem;"></div>
+</div>
+<!-- ████████████████████ GAME 4: Click Objects ████████████████████ -->
+<div class="screen" id="screen-g4">
+<div class="game-header">
+<button class="back-btn" onclick="playSound('click'); stopGame4(); goHome()">←</button>
+<img src="slike/dino-thunder.png" style="width:100px;">
+<div class="score-badge">🥚 <span id="g4-score">0</span></div>
+</div>
+<div class="star-meter" id="g4-stars"></div>
+<div class="instruction">
+
+<span id="g4-instr">Klikni zvjezdice što brže možeš!</span>
+</div>
+<div class="timer-bar"><div class="timer-fill" id="g4-timer-fill" style="width:100%"></div></div>
+<button class="sort-check-btn" id="g4-ready-btn" onclick="startG4Game()" style="display:none;">✅ Spreman!</button>
+<div class="click-arena" id="g4-arena"></div>
+<div class="click-stats">
+<div class="stat-box">
+<span>Pogođeno</span>
+<div id="g4-hit" style="font-size:1.5rem;font-weight:900;color:var(--green)">0</div>
+</div>
+<div class="stat-box">
+<span>Promašeno</span>
+<div id="g4-miss" style="font-size:1.5rem;font-weight:900;color:var(--red)">0</div>
+</div>
+<div class="stat-box">
+<span>Preostalo</span>
+<div id="g4-time" style="font-size:1.5rem;font-weight:900;color:var(--primary)">30s</div>
+</div>
+</div>
+</div>
+<!-- ████████████████████ GAME 5: Složi riječ ████████████████████ -->
+<div class="screen" id="screen-g5">
+<div class="game-header">
+<button class="back-btn" onclick="playSound('click'); goHome()">←</button>
+<img src="slike/dino-words.png" style="width:100px;">
+<div class="score-badge">🥚 <span id="g5-score">0</span></div>
+</div>
+<div class="star-meter" id="g5-stars"></div>
+<div class="instruction">
+<span id="g5-instr">Složi slova u ispravnu riječ!</span>
+</div>
+<div class="g5-hint" id="g5-hint"></div>
+<div class="g5-slots" id="g5-slots"></div>
+<div class="g5-pool" id="g5-pool"></div>
+<div style="display:flex;gap:12px;margin-top:8px;">
+<button class="sort-check-btn" onclick="checkG5()">✅ Provjeri!</button>
+<button class="sort-check-btn" onclick="resetG5()" style="background:var(--red);">🔄 Reset</button>
+</div>
+<div id="g5-progress" style="font-weight:700;color:#aaa;font-size:0.95rem;margin-top:8px;"></div>
+</div>
+<!-- ████████████████████ END SCREEN ████████████████████ -->
+<div class="screen" id="screen-end">
+<div class="mascot"><img src="slike/dino-main.png" style="width:250px;height:250px;"/></div>
+<h2 class="end-title" id="end-title">Bravo!</h2>
+<div class="end-stars" id="end-stars">🥚🥚🥚</div>
+<p class="end-message" id="end-message">Odlično si se pokazao!</p>
+<div class="results-grid" id="results-grid"></div>
+<div style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center;">
+<button class="btn-primary" onclick="playSound('click'); goHome()">🏠 Povratak</button>
+<button class="btn-secondary" onclick="playSound('click'); resetAndGoHome()">🎮 Nova igra</button>
+</div>
+</div>
+<!-- Feedback overlay -->
+<div class="feedback-overlay" id="feedback-overlay">
+<div class="feedback-bubble" id="feedback-bubble">✅</div>
+</div>
+<!-- Game instance end-->
+<div id="game-end-overlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:999; display:none; align-items:center; justify-content:center;">
+<div style="background:var(--card); border-radius:24px; padding:40px; text-align:center; max-width:400px; width:90%;">
+<div id="game-end-emoji"></div>
+<h2 id="game-end-title" style="margin:12px 0;">Bravo!</h2>
+<p id="game-end-msg" style="color:#666;"></p>
+<div style="display:flex; gap:12px; justify-content:center; margin-top:24px;">
+<button class="btn-primary" id="game-end-replay">🔄 Igraj ponovo</button>
+<button class="btn-secondary" onclick="playSound('click'); closeGameEnd(); goHome()">🏠 Početak</button>
+</div>
+</div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
